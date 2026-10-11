@@ -3,19 +3,35 @@
 
 **Live: [vocarb.vercel.app](https://vocarb.vercel.app/)**
 
-A single-page flashcard app for studying Arabic vocabulary with Chinese translations. Vocabulary lives in Supabase (PostgreSQL), the site is hosted on Vercel, and new words are added inside the app — so the code is deployed once and never touched again.
+A single-page flashcard app for studying Arabic vocabulary with Chinese and English translations. Built for a small class: anyone can study and takequizzes, while the word bank is managed by the owner through a hidden admin mode. Vocabulary lives in Supabase (PostgreSQL), English meanings are fetched through a free keyless translation API via a Vercel serverless function, and new words are added inside the app.
 
 ---
 
 ## Features
-- **Bulk import** — paste a weekly word list (Chinese + Arabic per line); the parser splits each line, extracts ج. plural forms, and auto-generates pinyin
+
+### Flashcards
+- **Bulk import** — paste a weekly word list (Chinese + Arabic per line); the parser handles numbered and bulleted WhatsApp-style lists, auto-swaps reversed sides, strips cross-script contamination (e.g. a stray Chinese character inside an Arabic word), extracts ج. plural forms, and auto-generates pinyin
 - **Sets** — organize words into sets (Week 12, Week 13, …) or review everything
 - **Both directions** — CN → AR or AR → CN; pinyin shown above Chinese, full harakat on the Arabic
 - **Keyboard-first** — Space to flip, arrow keys to navigate
 - **Shuffle** for randomized review
-- **Word bank** — browse and delete entries
-- **Private** — email/password auth via Supabase, with row-level security on all data
 - **Responsive** — works on desktop and mobile
+- **English meanings** — machine-translated on import, shown alongside the Chinese
+
+### Test mode
+- Tick any combination of sets, choose direction (CN → AR, AR → CN, or Mix) and length (10 / 20 / All) — always shuffled
+- Four-option multiple choice; distractors drawn from the selected word pool
+- Instant right/wrong feedback with auto-advance
+- Results screen: score, percentage, a "Focus on these" list of every missed word, and one-click Retry mistakes
+
+### Admin (owner only)
+- Unlocked by visiting /#admin and signing in — write access is enforced server-side by Supabase row-level security, not by hiding buttons
+- **Add Words** with live preview and per-word editable English before saving
+- **Word Bank**: click-to-edit English, delete words, fill in missing English, re-translate all English
+
+### Feedback
+- Built-in contact form (name / email / message → owner's inbox via FormSubmit), a dismissible feedback banner, and footer email links
+
 
 ---
 
@@ -28,6 +44,8 @@ A single-page flashcard app for studying Arabic vocabulary with Chinese translat
 | **Hosting** | Vercel |
 | **Pinyin** | `pinyin-pro` |
 | **Fonts** | Amiri (Arabic) · Noto Serif SC (Chinese) |
+| **Translation** |	MyMemory public API — free, keyless |
+| **Serverless** | Vercel function (api/translate.js) — input validation + translation proxy |
 
 ---
 
@@ -38,6 +56,7 @@ A single-page flashcard app for studying Arabic vocabulary with Chinese translat
 | **set_name** | text | Set label, e.g. Week 12 |
 | **zh** | text | Chinese |
 | **pinyin** | text | Auto-generated on import |
+| **en** | text	| English meaning — machine-translated, editable by admin |
 | **ar** | text | Arabic (with harakat) |
 | **plural** | text | Extracted from ج. notation |
 | **created_at** | timestamptz | Insertion time |
@@ -46,18 +65,23 @@ A single-page flashcard app for studying Arabic vocabulary with Chinese translat
 ---
 
 ## Usage
-1. **＋ Add Words** → paste the list, one entry per line:
-```
-提供、具备 تَوَفَّرَ يَتَوَفَّرُ تَوَفُّرًا
-食物、食品 غِذَاءٌ، ج. أَغْذِيَةٌ
-```
-2. Name the set → Save. Pinyin and plurals are handled automatically.
-3. Study.
+
+### Studying
+Pick a set (or All words), choose a direction, flip through cards with Space and the arrow keys. Shuffle randomizes the order.
+
 ### Keyboard shortcuts
 | Key | Action |
 | :--- | :--- |
 | **Space** | Flip card |
 | **← / →** | Prev / next |
+
+### Testing
+Test → tick the sets to include → choose direction and length → answerwith clicks or keys 1–4. Missed words are listed at the end for review.
+
+### Admin (owner-only)
+1. Visit vocarb.vercel.app/#admin and sign in.
+2. **+ Add Words** → paste the list, one entry per line: Numbering, bullets, and messy spacing are cleaned automatically. English auto-fills (click any of it in the preview to correct).
+3. **Word Bank** → edit English inline, delete words, or batch-translate.
 
 ---
 
