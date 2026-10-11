@@ -22,6 +22,7 @@ body{min-height:100vh;min-height:100dvh;background:var(--bg);color:var(--ink);fo
 /* ── brand / header ── */
 .brand{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.22em;color:#57534c;text-transform:uppercase}
 .brand i{width:7px;height:7px;background:var(--accent);transform:rotate(45deg)}
+#adminTag{font-size:10px;letter-spacing:.15em;color:#fff;background:var(--accent);border-radius:999px;padding:2px 9px}
 #appView{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
 #appView header{display:flex;align-items:center;justify-content:space-between;padding-top:28px;padding-bottom:14px}
 .counter{font-size:13px;letter-spacing:.14em;color:var(--muted);font-variant-numeric:tabular-nums}
@@ -42,6 +43,8 @@ select:focus,.txt:focus{border-color:#c9c3ba}
 .seg button{border:0;background:transparent;padding:6px 14px;border-radius:999px;font-size:12.5px;color:#8b8479;cursor:pointer;font-family:inherit;letter-spacing:.06em;transition:color .2s,background .2s,box-shadow .2s}
 .seg button:hover{color:var(--ink)}
 .seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(33,31,28,.14)}
+.admin-only{display:none!important}
+body.admin .admin-only{display:inline-flex!important}
 .progress{height:2px;background:var(--line);border-radius:2px;overflow:hidden}
 .progress .fill{height:100%;width:0;background:var(--accent);transition:width .45s cubic-bezier(.4,.1,.2,1)}
 
@@ -53,16 +56,16 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:30px 
 .card.flipped .inner{transform:rotateY(180deg)}
 .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 1px 2px rgba(33,31,28,.04),0 24px 48px -32px rgba(33,31,28,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px 38px}
 .face.back{transform:rotateY(180deg)}
-.py{font-size:clamp(14px,2.2vw,17px);color:var(--muted);letter-spacing:.16em;margin-bottom:20px}
+.py{font-size:clamp(14px,2.2vw,17px);color:var(--muted);letter-spacing:.16em;margin-bottom:18px}
 .zh{font-size:clamp(30px,5.4vw,44px);font-weight:500;letter-spacing:.06em;line-height:1.55}
+.en{font-size:clamp(15px,2.6vw,20px);color:var(--ink);margin-top:12px;letter-spacing:.02em}
 .ar{font-family:'Amiri',serif;font-size:clamp(26px,4.6vw,38px);line-height:1.95;word-spacing:.22em;padding:0 6px}
-.ar-pl{font-family:'Amiri',serif;font-size:clamp(16px,2.6vw,21px);color:var(--muted);margin-top:2px}
 .rule{width:34px;height:1px;background:var(--faint);margin:20px auto 16px}
 .zh-sm{font-size:13px;color:var(--muted);letter-spacing:.14em}
 .zh-sm.ar-face{font-family:'Amiri',serif;font-size:16px;letter-spacing:.02em}
 @keyframes enter{from{opacity:.15;transform:translateY(10px)}to{opacity:1;transform:none}}
 .card.enter{animation:enter .35s cubic-bezier(.25,.7,.3,1)}
-.empty{display:flex;flex-direction:column;align-items:center;gap:18px;color:var(--muted);font-size:14px;letter-spacing:.12em}
+.empty{display:flex;flex-direction:column;align-items:center;gap:14px;color:var(--muted);font-size:14px;letter-spacing:.12em}
 
 /* ── nav ── */
 .nav{display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:#8a847b;cursor:pointer;flex:0 0 auto;padding:0;transition:color .2s,border-color .2s,box-shadow .2s,transform .15s}
@@ -71,22 +74,12 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:30px 
 .nav.side{position:absolute;top:50%;margin-top:-23px}
 #prev{left:-64px}#next{right:-64px}
 .nav.mini{display:none;width:40px;height:40px}
-footer{display:flex;align-items:center;justify-content:center;gap:14px;padding-bottom:28px}
+footer{display:flex;align-items:center;justify-content:center;gap:16px;padding-bottom:28px;flex-wrap:wrap}
 .hint{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted)}
 .hint i{width:3px;height:3px;border-radius:50%;background:var(--faint)}
 kbd{font-family:inherit;font-size:11px;color:#7c766d;background:#fff;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:2px 8px}
-
-/* ── login ── */
-#loginView{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px}
-.login-card{width:min(360px,100%);background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 24px 48px -32px rgba(33,31,28,.18);padding:34px 32px;display:flex;flex-direction:column;gap:14px}
-.login-card .brand{justify-content:center;font-size:14px}
-.login-sub{text-align:center;font-size:13px;color:var(--muted);letter-spacing:.2em;margin-top:-4px}
-.fld{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
-.fld input{font-family:inherit;font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none;letter-spacing:normal;text-transform:none}
-.fld input:focus{border-color:#c9c3ba}
-.err{font-size:12.5px;color:var(--accent);min-height:1em;text-align:center}
-.wide{width:100%}
-.setup-note{font-size:12.5px;color:#7c766d;background:#f6f1e9;border-left:3px solid var(--accent);border-radius:8px;padding:10px 12px;line-height:1.7;text-transform:none;letter-spacing:normal;text-align:left}
+.contact{font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.08em}
+.contact:hover{color:var(--ink)}
 
 /* ── dialogs ── */
 dialog{border:0;padding:0;border-radius:20px;width:min(660px,calc(100vw - 32px));box-shadow:0 32px 80px -24px rgba(33,31,28,.4)}
@@ -96,23 +89,31 @@ dialog::backdrop{background:rgba(33,31,28,.35)}
 .dlg-head h3{font-size:16px;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
 .x{border:0;background:none;color:var(--muted);font-size:15px;cursor:pointer;padding:4px 8px;border-radius:8px}
 .x:hover{color:var(--ink);background:#f1ece4}
+.fld{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.fld input{font-family:inherit;font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none;letter-spacing:normal;text-transform:none}
+.fld input:focus{border-color:#c9c3ba}
+.err{font-size:12.5px;color:var(--accent);min-height:1em;text-align:center}
+.wide{width:100%}
+.mt{margin-top:16px}
 textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-family:'Noto Serif SC','Amiri',serif;resize:vertical}
 .parse-info{font-size:12.5px;color:var(--muted);margin-top:8px}
-.preview{max-height:190px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}
+.fmt-hint{font-size:12px;color:var(--muted);line-height:1.8;margin-top:6px}
+.fmt-hint code{font-family:inherit;background:#f1ece4;border-radius:5px;padding:1px 6px}
+.preview{max-height:230px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}
 .prow{display:flex;gap:14px;padding:8px 14px;border-bottom:1px solid var(--line);font-size:13.5px;align-items:baseline}
 .prow:last-child{border-bottom:0}
-.prow .pzh{min-width:42%}
+.prow .pzh{min-width:32%}
 .prow em,.wzh em{font-style:normal;color:var(--faint);font-size:12px;margin-left:6px}
-.prow .par{font-family:'Amiri',serif;direction:rtl;flex:1;text-align:right;font-size:15.5px}
-.prow .pl{color:var(--muted);font-size:13px}
-.mt{margin-top:16px}
+.prow .pen{flex:1;text-align:left;outline:none;border-bottom:1px dashed transparent;min-height:1.2em;cursor:text}
+.prow .pen:hover,.prow .pen:focus{border-bottom-color:var(--faint)}
+.prow .pen:empty::before{content:'English…';color:var(--faint)}
+.prow .par{font-family:'Amiri',serif;direction:rtl;text-align:right;font-size:15.5px;min-width:30%}
 
 /* ── manage list ── */
 .wrow{display:flex;align-items:baseline;gap:14px;padding:11px 2px;border-bottom:1px solid var(--line);font-size:14px}
 .wrow:last-child{border-bottom:0}
 .wzh{min-width:40%}
 .war{font-family:'Amiri',serif;font-size:16.5px;flex:1;text-align:right}
-.war b{font-weight:400;color:var(--muted);font-size:14px}
 .del{border:0;background:none;color:var(--faint);font-size:12px;cursor:pointer;font-family:inherit;letter-spacing:.08em;padding:2px 4px}
 .del:hover{color:var(--accent)}
 .mempty{color:var(--muted);font-size:13px;text-align:center;padding:24px 0}
@@ -125,7 +126,6 @@ textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-fam
   #appView header{padding-top:20px}
   .nav.side{display:none}
   .nav.mini{display:flex}
-  footer{justify-content:space-between}
   .card{height:clamp(280px,50vh,380px)}
   .face{padding:26px 22px}
 }
@@ -134,23 +134,10 @@ textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-fam
 </head>
 <body>
 
-<!-- login -->
-<div id="loginView">
-  <form class="login-card" id="loginForm">
-    <div class="brand"><i></i>Vocabulary</div>
-    <p class="login-sub">العربية · 中文</p>
-    <label class="fld">Email<input type="email" id="emailIn" autocomplete="username" required></label>
-    <label class="fld">Password<input type="password" id="pwIn" autocomplete="current-password" required></label>
-    <p class="err" id="loginErr"></p>
-    <button class="btn primary wide" id="loginBtn" type="submit">Sign In</button>
-    <p class="setup-note" id="setupNote" hidden>Supabase isn't configured yet — open index.html and replace SUPABASE_URL and SUPABASE_ANON_KEY at the top of the &lt;script&gt; section with your own values, then refresh.</p>
-  </form>
-</div>
-
-<!-- main app -->
-<div id="appView" hidden>
+<!-- main app (public — no login gate) -->
+<div id="appView">
   <header class="wrap">
-    <div class="brand"><i></i>Vocabulary</div>
+    <div class="brand"><i></i>Vocabulary<span class="admin-only" id="adminTag">admin</span></div>
     <div class="counter"><b id="cur">00</b><span class="sep">/</span><span id="total">00</span></div>
   </header>
 
@@ -162,9 +149,9 @@ textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-fam
       <button id="frontAr">AR → CN</button>
     </div>
     <span class="spacer"></span>
-    <button class="btn" id="addBtn">＋ Add Words</button>
-    <button class="btn" id="manageBtn">Word Bank</button>
-    <button class="btn ghost" id="logoutBtn">Log Out</button>
+    <button class="btn admin-only" id="addBtn">＋ Add Words</button>
+    <button class="btn admin-only" id="manageBtn">Word Bank</button>
+    <button class="btn ghost admin-only" id="exitBtn">Exit Admin</button>
   </div>
   <div class="wrap"><div class="progress"><div class="fill" id="fill"></div></div></div>
 
@@ -176,18 +163,18 @@ textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-fam
       <div class="card" id="card" role="button" tabindex="0" aria-label="Flip card">
         <div class="inner">
           <section class="face front">
-            <div class="py" id="fPy"></div>
-            <div class="zh" id="fZh" lang="zh"></div>
+            <div class="py" id="fPy" hidden></div>
+            <div class="zh" id="fZh" lang="zh" hidden></div>
+            <div class="en" id="fEn" lang="en" hidden></div>
             <div class="ar" id="fAr" lang="ar" dir="rtl" hidden></div>
-            <div class="ar-pl" id="fArPl" lang="ar" dir="rtl" hidden></div>
           </section>
           <section class="face back">
             <div class="py" id="bPy" hidden></div>
             <div class="zh" id="bZh" lang="zh" hidden></div>
+            <div class="en" id="bEn" lang="en" hidden></div>
             <div class="ar" id="bAr" lang="ar" dir="rtl" hidden></div>
-            <div class="ar-pl" id="bArPl" lang="ar" dir="rtl" hidden></div>
-            <div class="rule"></div>
-            <div class="zh-sm" id="bHint"></div>
+            <div class="rule" id="bRule" hidden></div>
+            <div class="zh-sm" id="bHint" hidden></div>
           </section>
         </div>
       </div>
@@ -195,10 +182,7 @@ textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-fam
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
-    <div class="empty" id="emptyState" hidden>
-      <p>No words in this set yet</p>
-      <button class="btn primary" id="addBtn2">＋ Add your first words</button>
-    </div>
+    <div class="empty" id="emptyState" hidden><p id="emptyMsg">No words here yet</p></div>
   </main>
 
   <footer class="wrap">
@@ -206,27 +190,40 @@ textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-fam
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
     <div class="hint"><kbd>Space</kbd> Flip<i></i><kbd>←</kbd> Prev<i></i><kbd>→</kbd> Next</div>
+    <a class="contact" href="mailto:zihanlei0512@gmail.com?subject=Vocarb%20feedback">Feedback · zihanlei0512@gmail.com</a>
     <button class="nav mini" id="nextM" aria-label="Next card">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
     </button>
   </footer>
 </div>
 
-<!-- add words dialog -->
+<!-- admin sign-in dialog -->
+<dialog id="adminDlg">
+  <form class="dlg-body" id="adminForm" style="width:min(340px,80vw)">
+    <div class="dlg-head"><h3>Admin</h3><button class="x" type="button" id="adminClose">✕</button></div>
+    <label class="fld mt">Email<input type="email" id="adminEmail" autocomplete="username" required></label>
+    <label class="fld mt">Password<input type="password" id="adminPw" autocomplete="current-password" required></label>
+    <p class="err" id="adminErr"></p>
+    <button class="btn primary wide mt" id="adminGo" type="submit">Sign In</button>
+  </form>
+</dialog>
+
+<!-- add words dialog (admin only) -->
 <dialog id="addDlg">
   <div class="dlg-body">
     <div class="dlg-head"><h3>Add Words</h3><button class="x" id="addClose" type="button">✕</button></div>
     <label class="fld mt">Set name (e.g. Week 12)<input class="txt" id="setNameIn" list="setNames" placeholder="e.g. Week 12" style="border-radius:10px"></label>
     <datalist id="setNames"></datalist>
-    <label class="fld mt">Paste your list — one word per line: Chinese + Arabic</label>
-    <textarea class="txt" id="pasteIn" rows="7" dir="auto" placeholder="提供、具备 تَوَفَّرَ يَتَوَفَّرُ تَوَفُّرًا&#10;食物、食品 غِذَاءٌ، ج. أَغْذِيَةٌ"></textarea>
+    <label class="fld mt">Paste your list — one word per line</label>
+    <textarea class="txt" id="pasteIn" rows="7" dir="auto" placeholder="提供、具备 تَوَفَّرَ يَتَوَفَّرُ تَوَفُّرًا&#10;食物、食品 | food | غِذَاءٌ، ج. أَغْذِيَةٌ"></textarea>
+    <p class="fmt-hint">Numbering, bullets and messy spacing are cleaned automatically. English meanings are filled in by AI — click any of them in the preview to correct. To provide your own, use pipes: <code>中文 | English | العربية</code></p>
     <p class="parse-info" id="parseInfo"></p>
     <div class="preview" id="preview" hidden></div>
     <button class="btn primary wide mt" id="saveBtn" disabled>Save</button>
   </div>
 </dialog>
 
-<!-- word bank dialog -->
+<!-- word bank dialog (admin only) -->
 <dialog id="manageDlg">
   <div class="dlg-body">
     <div class="dlg-head"><h3 id="manageTitle">Word Bank</h3><button class="x" id="manageClose" type="button">✕</button></div>
@@ -237,17 +234,21 @@ textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-fam
 <div class="toast" id="toast"></div>
 
 <script>
+/* ════════ Supabase (Supabase → Project Settings → API) ════════ */
 const SUPABASE_URL      = "https://bejfhxmkpbdxxjmckqzu.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlamZoeG1rcGJkeHhqbWNrcXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEwOTk3NDAsImV4cCI6MjEwNjY3NTc0MH0.AVBLbyq5kPQ9o2ykmFGVz1X0vTIT76_aFCmJuYjjiws";
+/* ══════════════════════════════════════════════════════════════ */
+/* NOTE: the OpenRouter key is NOT here on purpose — it lives in a
+   Vercel environment variable used by /api/translate.            */
 
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,'0');
 const show=(el,on)=>{el.hidden=!on;};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-let sb=null, configured=false;
+let sb=null,configured=false;
 try{
-  if(typeof supabase!=='undefined' && !SUPABASE_URL.includes('PASTE-') && !SUPABASE_ANON_KEY.includes('PASTE-')){
+  if(typeof supabase!=='undefined' && !SUPABASE_URL.includes('PASTE-')){
     sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
     configured=true;
   }
@@ -256,21 +257,48 @@ try{
 const AR=/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
 const ZH=/[\u4e00-\u9fff\u3400-\u4dbf]/;
 
-let words=[],order=[],idx=0,sets=[];
+let words=[],order=[],idx=0,sets=[],isAdmin=false;
 let curSet='__all__';
 let mode=localStorage.getItem('vocab-mode')||'zh';
-const loginView=$('loginView'),appView=$('appView');
 
-/* ── auth ── */
-function showLogin(){show(loginView,true);show(appView,false);}
-function showApp(){show(loginView,false);show(appView,true);refresh();}
+/* ── admin mode ── */
+function setAdmin(on){
+  isAdmin=on;
+  document.body.classList.toggle('admin',on);
+}
+async function checkSessionAdmin(){
+  if(!configured)return;
+  const{data}=await sb.auth.getSession();
+  if(data.session)setAdmin(true);
+}
+function openAdmin(){
+  if(isAdmin||!configured)return;
+  $('adminErr').textContent='';
+  $('adminDlg').showModal();
+}
+ $('adminForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const errEl=$('adminErr'),btn=$('adminGo');
+  errEl.textContent='';btn.disabled=true;btn.textContent='Signing in…';
+  const{error}=await sb.auth.signInWithPassword({email:$('adminEmail').value.trim(),password:$('adminPw').value});
+  btn.disabled=false;btn.textContent='Sign In';
+  if(error){errEl.textContent=mapErr(error.message);return;}
+  $('adminDlg').close();
+  setAdmin(true);
+  toast('Admin mode on');
+});
+ $('adminClose').addEventListener('click',()=>$('adminDlg').close());
+ $('exitBtn').addEventListener('click',async()=>{await sb.auth.signOut();setAdmin(false);toast('Admin mode off');});
+if(location.hash==='#admin')openAdmin();
+window.addEventListener('hashchange',()=>{if(location.hash==='#admin')openAdmin();});
 
-if(!configured){
-  showLogin();
-  $('setupNote').hidden=false;
-  $('loginForm').querySelectorAll('input,button').forEach(el=>el.disabled=true);
+/* ── boot ── */
+if(configured){
+  refresh();
+  checkSessionAdmin();
 }else{
-  sb.auth.getSession().then(({data})=>{data.session?showApp():showLogin();});
+  show($('emptyState'),true);
+  $('emptyMsg').textContent='Supabase is not configured — check index.html';
 }
 
 function mapErr(m){
@@ -279,16 +307,6 @@ function mapErr(m){
   if(/fetch/i.test(m))return 'Network error — check your connection and try again';
   return m;
 }
- $('loginForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-  const errEl=$('loginErr'),btn=$('loginBtn');
-  errEl.textContent='';btn.disabled=true;btn.textContent='Signing in…';
-  const{error}=await sb.auth.signInWithPassword({email:$('emailIn').value.trim(),password:$('pwIn').value});
-  btn.disabled=false;btn.textContent='Sign In';
-  if(error){errEl.textContent=mapErr(error.message);return;}
-  showApp();
-});
- $('logoutBtn').addEventListener('click',async()=>{await sb.auth.signOut();showLogin();});
 
 /* ── data ── */
 async function loadSets(){
@@ -321,21 +339,22 @@ async function refresh(pick){
 
 /* ── flashcards ── */
 const card=$('card');
+function arText(w){return w.ar+(w.plural?' · '+w.plural:'');}
 function renderCard(){
   const has=words.length>0;
   show($('deck'),has);show($('emptyState'),!has);
   if(!has){$('cur').textContent='00';$('total').textContent='00';$('fill').style.width='0%';return;}
   const w=words[order[idx]],zhFront=(mode==='zh');
-  show($('fPy'),zhFront&&!!w.pinyin);show($('fZh'),zhFront);
-  show($('fAr'),!zhFront);show($('fArPl'),!zhFront&&!!w.plural);
-  if(zhFront){$('fPy').textContent=w.pinyin||'';$('fZh').textContent=w.zh;}
-  else{$('fAr').textContent=w.ar;if(w.plural)$('fArPl').textContent='ج. '+w.plural;}
-  show($('bPy'),!zhFront&&!!w.pinyin);show($('bZh'),!zhFront);
-  show($('bAr'),zhFront);show($('bArPl'),zhFront&&!!w.plural);
-  if(zhFront){$('bAr').textContent=w.ar;if(w.plural)$('bArPl').textContent='ج. '+w.plural;}
-  else{$('bPy').textContent=w.pinyin||'';$('bZh').textContent=w.zh;}
+  show($('fPy'),zhFront&&!!w.pinyin);show($('fZh'),zhFront);show($('fEn'),zhFront&&!!w.en);show($('fAr'),!zhFront);
+  if(zhFront){$('fPy').textContent=w.pinyin||'';$('fZh').textContent=w.zh;$('fEn').textContent=w.en||'';}
+  else{$('fAr').textContent=arText(w);}
+  show($('bAr'),zhFront);show($('bPy'),!zhFront&&!!w.pinyin);show($('bZh'),!zhFront);show($('bEn'),!zhFront&&!!w.en);
+  if(zhFront){$('bAr').textContent=arText(w);}
+  else{$('bPy').textContent=w.pinyin||'';$('bZh').textContent=w.zh;$('bEn').textContent=w.en||'';}
+  show($('bRule'),true);
   const h=$('bHint');
-  h.textContent=zhFront?w.zh:w.ar;
+  h.textContent=zhFront?(w.en?w.zh+' — '+w.en:w.zh):w.ar;
+  show(h,true);
   h.lang=zhFront?'zh':'ar';h.dir=zhFront?'ltr':'rtl';
   h.classList.toggle('ar-face',!zhFront);
   $('cur').textContent=pad(idx+1);
@@ -372,22 +391,25 @@ function setMode(m){
  $('setSel').addEventListener('change',()=>{curSet=$('setSel').value;localStorage.setItem('vocab-set',curSet);loadSet(curSet);});
 
 document.addEventListener('keydown',e=>{
-  if(appView.hidden||$('addDlg').open||$('manageDlg').open)return;
+  if($('addDlg').open||$('manageDlg').open||$('adminDlg').open)return;
   if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
   if(e.code==='Space'){e.preventDefault();if(!e.repeat)flip();}
   else if(e.code==='ArrowRight'){e.preventDefault();next();}
   else if(e.code==='ArrowLeft'){e.preventDefault();prev();}
 });
 
-/* ── parse pasted vocab ── */
+/* ── parse pasted vocab (tolerant of messy formatting) ── */
 function parseLine(raw){
   let line=raw.trim();
   if(!line||line.startsWith('#'))return null;
-  let zh,ar;
-  if(line.includes('\t')||line.includes(' | ')){
-    const parts=line.split(/\t|\s\|\s/).map(s=>s.trim()).filter(Boolean);
-    if(parts.length<2)return null;
-    zh=parts[0];ar=parts.slice(1).join(' ');
+  /* strip leading bullets and numbering: 1.  1)  1、  1:  -  •  * */
+  line=line.replace(/^(?:[•*·▪◦\-–—]|\d{1,3}\s*[.、)）:：\-])\s*/,'');
+  let zh='',en='',ar='';
+  if(line.includes('|')){
+    const parts=line.split('|').map(s=>s.trim()).filter(Boolean);
+    if(parts.length>=3){zh=parts[0];en=parts[1];ar=parts.slice(2).join(' ');}
+    else if(parts.length===2){zh=parts[0];ar=parts[1];}
+    else return null;
   }else{
     const i=line.search(AR);
     if(i===-1)return null;
@@ -395,55 +417,149 @@ function parseLine(raw){
     ar=line.slice(i).trim();
   }
   if(AR.test(zh)&&ZH.test(ar)&&!ZH.test(zh)){const t=zh;zh=ar;ar=t;}
+  /* pull parenthetical pinyin out of the Chinese: 提供 (tí gōng) → pinyin */
+  let pyOverride='';
+  const pm=zh.match(/[（(]([^()（）]+)[)）]/);
+  if(pm){pyOverride=pm[1].trim();zh=zh.replace(pm[0],'').trim();}
+  /* cross-script sanitizer: no Chinese inside Arabic, no Arabic inside Chinese */
+  zh=zh.replace(new RegExp(AR.source,'g'),'').replace(/\s+/g,' ').trim();
+  ar=ar.replace(new RegExp(ZH.source,'g'),'').replace(/\s+/g,' ').trim();
+  en=en.replace(new RegExp(ZH.source,'g'),'').trim();
   if(!zh||!ar)return null;
   let plural=null;
   const seg=ar.split(/ج\./);
   if(seg.length===2){ar=seg[0].replace(/[،,]\s*$/,'').trim();plural=seg[1].trim();}
-  let pinyin='';
-  if(window.pinyinPro){
-    try{pinyin=pinyinPro.pinyin(zh.replace(/[^\u4e00-\u9fff\u3400-\u4dbf\s]/g,'')).trim();}catch(e){}
+  let pinyin=pyOverride;
+  if(!pinyin&&window.pinyinPro){
+    try{pinyin=pinyinPro.pinyin(zh).trim();}catch(e){}
   }
   if(!pinyin){
     const m=zh.match(/[a-zA-Zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü\s·]+$/);
     if(m)pinyin=m[0].trim();
   }
-  return{zh,pinyin,ar,plural};
+  return{zh,pinyin,en:en||null,ar,plural};
 }
+
+/* ── auto-translate (serverless /api/translate → OpenRouter) ── */
 let parsed=[];
+let translateTimer=null,translating=false;
+const CHUNK=40;
+
+function commitEnEdits(){
+  const el=document.activeElement;
+  if(el&&el.classList&&el.classList.contains('pen')&&el.dataset.i!=null){
+    const i=+el.dataset.i;
+    if(parsed[i])parsed[i].en=el.textContent.replace(/\s+/g,' ').trim()||null;
+    el.blur();
+  }
+}
+async function translateChunk(list){
+  const r=await fetch('/api/translate',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({words:list})
+  });
+  if(!r.ok){
+    let m='';
+    try{m=(await r.json()).error||'';}catch(e){}
+    throw new Error(m||('HTTP '+r.status));
+  }
+  const d=await r.json();
+  return Array.isArray(d.translations)?d.translations:[];
+}
+async function translateMissing(){
+  if(translating)return;
+  const need=parsed.map((p,i)=>({p,i})).filter(x=>!x.p.en);
+  if(!need.length)return;
+  translating=true;
+  const total=need.length;let done=0;
+  try{
+    for(let c=0;c<need.length;c+=CHUNK){
+      const part=need.slice(c,c+CHUNK);
+      const outs=await translateChunk(part.map(x=>x.p.zh));
+      part.forEach((x,k)=>{
+        const t=(outs[k]||'').trim();
+        if(!x.p.en&&t)x.p.en=t;
+      });
+      done+=part.length;
+      $('parseInfo').textContent=`Translating… ${done}/${total}`;
+      renderPreview();
+    }
+    $('parseInfo').textContent=`Recognized ${parsed.length} word${parsed.length>1?'s':''} — English filled in automatically (click any of them to edit)`;
+  }catch(e){
+    $('parseInfo').textContent=`Auto-translate failed (${e.message}). You can still save — English can be added later.`;
+  }
+  translating=false;
+}
+
+function renderPreview(){
+  const pv=$('preview');
+  if(!parsed.length){pv.hidden=true;return;}
+  pv.hidden=false;
+  pv.innerHTML=parsed.map((p,i)=>{
+    const py=p.pinyin?` <em>${esc(p.pinyin)}</em>`:'';
+    const pl=p.plural?` <span style="color:var(--muted);font-size:13px"> · ج. ${esc(p.plural)}</span>`:'';
+    return `<div class="prow">
+      <span class="pzh">${esc(p.zh)}${py}</span>
+      <span class="pen" contenteditable="true" data-i="${i}" spellcheck="false">${esc(p.en||'')}</span>
+      <span class="par" dir="rtl" lang="ar">${esc(p.ar)}${pl}</span>
+    </div>`;
+  }).join('');
+}
 function parseInput(){
+  commitEnEdits();
   const lines=$('pasteIn').value.split(/\r?\n/);
-  parsed=lines.map(parseLine).filter(Boolean);
+  /* keep translations already fetched for unchanged lines */
+  const old=new Map();
+  parsed.forEach(p=>old.set(p.zh+'|'+p.ar,p.en));
+  const seen=new Set();
+  parsed=lines.map(parseLine).filter(Boolean).filter(p=>{
+    const k=p.zh+'|'+p.ar;
+    if(seen.has(k))return false;
+    seen.add(k);return true;
+  });
+  parsed.forEach(p=>{if(!p.en&&old.has(p.zh+'|'+p.ar))p.en=old.get(p.zh+'|'+p.ar);});
   const typed=lines.filter(l=>l.trim()&&!l.trim().startsWith('#')).length;
   const skipped=typed-parsed.length;
-  $('parseInfo').textContent=parsed.length
-    ?`Recognized ${parsed.length} word${parsed.length>1?'s':''}`+(skipped>0?` — ${skipped} line${skipped>1?'s':''} couldn't be read (skipped)`:'')
-    :(skipped>0?'Nothing recognized — each line should be: Chinese + spaces + Arabic':'');
-  const pv=$('preview');
-  if(parsed.length){
-    pv.hidden=false;
-    pv.innerHTML=parsed.map(p=>{
-      const py=p.pinyin?` <em>${esc(p.pinyin)}</em>`:'';
-      const pl=p.plural?` <span class="pl">ج. ${esc(p.plural)}</span>`:'';
-      return `<div class="prow"><span class="pzh">${esc(p.zh)}${py}</span><span class="par">${esc(p.ar)}${pl}</span></div>`;
-    }).join('');
-  }else pv.hidden=true;
+  if(!translating){
+    $('parseInfo').textContent=parsed.length
+      ?`Recognized ${parsed.length} word${parsed.length>1?'s':''}`+(skipped>0?` — ${skipped} line${skipped>1?'s':''} couldn't be read (skipped)`:'')
+      :(skipped>0?'Nothing recognized — each line needs Chinese and Arabic':'');
+  }
+  renderPreview();
   $('saveBtn').disabled=!parsed.length;
+  clearTimeout(translateTimer);
+  if(parsed.length)translateTimer=setTimeout(translateMissing,700);
 }
  $('pasteIn').addEventListener('input',parseInput);
+/* commit inline English edits on blur; Enter commits instead of newline */
+ $('preview').addEventListener('blur',e=>{
+  if(e.target.classList&&e.target.classList.contains('pen')){
+    const i=+e.target.dataset.i;
+    if(parsed[i])parsed[i].en=e.target.textContent.replace(/\s+/g,' ').trim()||null;
+  }
+},true);
+ $('preview').addEventListener('keydown',e=>{
+  if(e.target.classList&&e.target.classList.contains('pen')&&e.key==='Enter'){
+    e.preventDefault();e.target.blur();
+  }
+});
 
-/* ── add dialog ── */
+/* ── add dialog (admin only) ── */
 const addDlg=$('addDlg'),manageDlg=$('manageDlg');
 function openAdd(){
+  if(!isAdmin)return;
   const last=localStorage.getItem('vocab-set');
   if(!$('setNameIn').value&&last&&last!=='__all__')$('setNameIn').value=last;
   addDlg.showModal();
 }
  $('addBtn').addEventListener('click',openAdd);
- $('addBtn2').addEventListener('click',openAdd);
  $('addClose').addEventListener('click',()=>addDlg.close());
  $('saveBtn').addEventListener('click',async()=>{
+  if(!isAdmin){toast('Admin only');return;}
+  commitEnEdits();
   const setName=$('setNameIn').value.trim()||'Default';
-  const rows=parsed.map(p=>({set_name:setName,zh:p.zh,pinyin:p.pinyin||null,ar:p.ar,plural:p.plural||null}));
+  const rows=parsed.map(p=>({set_name:setName,zh:p.zh,pinyin:p.pinyin||null,en:p.en,ar:p.ar,plural:p.plural}));
   const btn=$('saveBtn');btn.disabled=true;btn.textContent='Saving…';
   const{error}=await sb.from('words').insert(rows);
   btn.disabled=false;btn.textContent='Save';
@@ -454,19 +570,20 @@ function openAdd(){
   toast(`Added ${rows.length} word${rows.length>1?'s':''} to "${setName}"`);
 });
 
-/* ── word bank dialog ── */
+/* ── word bank dialog (admin only) ── */
 function fillManage(){
   $('manageTitle').textContent=curSet==='__all__'?'Word Bank — All Sets':`Word Bank — ${curSet}`;
   const list=$('wordList');
   if(!words.length){list.innerHTML='<p class="mempty">No words in this set yet.</p>';return;}
-  list.innerHTML=words.map(w=>`
-    <div class="wrow">
-      <span class="wzh">${esc(w.zh)}<em>${esc(w.pinyin||'')}</em></span>
-      <span class="war" dir="rtl" lang="ar">${esc(w.ar)}${w.plural?` <b>ج. ${esc(w.plural)}</b>`:''}</span>
+  list.innerHTML=words.map(w=>{
+    const meta=[w.pinyin,w.en].filter(Boolean).join(' · ');
+    return `<div class="wrow">
+      <span class="wzh">${esc(w.zh)}<em>${esc(meta)}</em></span>
+      <span class="war" dir="rtl" lang="ar">${esc(w.ar)}${w.plural?` · ج. ${esc(w.plural)}`:''}</span>
       <button class="del" data-id="${w.id}" data-zh="${esc(w.zh)}">Delete</button>
-    </div>`).join('');
+    </div>`;}).join('');
 }
- $('manageBtn').addEventListener('click',()=>{fillManage();manageDlg.showModal();});
+ $('manageBtn').addEventListener('click',()=>{if(!isAdmin)return;fillManage();manageDlg.showModal();});
  $('manageClose').addEventListener('click',()=>manageDlg.close());
  $('wordList').addEventListener('click',async e=>{
   const btn=e.target.closest('.del');
