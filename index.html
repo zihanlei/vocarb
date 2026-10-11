@@ -12,7 +12,7 @@
 <style>
 :root{
   --bg:#faf8f4; --card:#fff; --ink:#211f1c;
-  --muted:#8b8479; --faint:#c9c3ba; --line:#e9e5de; --accent:#b0512f;
+  --muted:#8b8479; --faint:#c9c3ba; --line:#e9e5de; --accent:#b0512f; --ok:#3e7d4e;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{min-height:100vh;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:'Noto Serif','Noto Serif SC',serif;-webkit-font-smoothing:antialiased}
@@ -89,8 +89,9 @@ kbd{font-family:inherit;font-size:11px;color:#7c766d;background:#fff;border:1px 
 .contact:hover{color:var(--ink)}
 .contact-btn{border:0;background:none;cursor:pointer;font-family:inherit;padding:0}
 
-/* ── dialogs ── */
-dialog{border:0;padding:0;border-radius:20px;width:min(660px,calc(100vw - 32px));box-shadow:0 32px 80px -24px rgba(33,31,28,.4)}
+/* ── dialogs (margin:auto restores centering removed by the global reset) ── */
+dialog{margin:auto;border:0;padding:0;border-radius:20px;width:min(660px,calc(100vw - 32px));box-shadow:0 32px 80px -24px rgba(33,31,28,.4)}
+dialog.narrow{width:min(420px,calc(100vw - 32px))}
 dialog::backdrop{background:rgba(33,31,28,.35)}
 .dlg-body{padding:26px 28px;max-height:82vh;overflow:auto}
 .dlg-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
@@ -102,7 +103,7 @@ dialog::backdrop{background:rgba(33,31,28,.35)}
 .fld input:focus,.fld textarea:focus{border-color:#c9c3ba}
 .fld textarea{resize:vertical;line-height:1.7}
 .err{font-size:12.5px;color:var(--accent);min-height:1em;text-align:center}
-.ok{font-size:13px;color:#3e7d4e;text-align:center}
+.ok{font-size:13px;color:var(--ok);text-align:center}
 .wide{width:100%}
 .mt{margin-top:16px}
 .contact-sub{font-size:13.5px;color:var(--muted);line-height:1.8;margin:6px 0 4px}
@@ -121,25 +122,57 @@ textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-fam
 .prow .par{font-family:'Amiri',serif;direction:rtl;text-align:right;font-size:15.5px;min-width:30%}
 
 /* ── manage list ── */
-.wb-bar{display:flex;align-items:center;gap:12px;margin:4px 0 10px;flex-wrap:wrap}
+.wb-bar{display:flex;align-items:center;gap:10px;margin:4px 0 10px;flex-wrap:wrap}
 .wrow{display:flex;align-items:baseline;gap:14px;padding:11px 2px;border-bottom:1px solid var(--line);font-size:14px}
 .wrow:last-child{border-bottom:0}
-.wzh{min-width:40%}
-.war{font-family:'Amiri',serif;font-size:16.5px;flex:1;text-align:right}
+.wzh{min-width:34%}
+.wen{flex:1;min-width:90px;outline:none;border-bottom:1px dashed transparent;cursor:text}
+.wen:hover,.wen:focus{border-bottom-color:var(--faint)}
+.wen:empty::before{content:'English…';color:var(--faint)}
+.war{font-family:'Amiri',serif;font-size:16.5px;text-align:right}
 .del{border:0;background:none;color:var(--faint);font-size:12px;cursor:pointer;font-family:inherit;letter-spacing:.08em;padding:2px 4px}
 .del:hover{color:var(--accent)}
 .mempty{color:var(--muted);font-size:13px;text-align:center;padding:24px 0}
+
+/* ── test mode ── */
+#testView{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+.test-wrap{width:min(620px,100%);margin:0 auto;padding:0 24px}
+#testView header{display:flex;align-items:center;justify-content:space-between;padding-top:28px;padding-bottom:14px}
+#testProgress{font-size:13px;letter-spacing:.12em;color:var(--muted);font-variant-numeric:tabular-nums}
+.tsetup{margin:22px 0 40px;display:flex;flex-direction:column;gap:20px}
+.tlabel{font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.tset-list{display:flex;flex-direction:column;gap:9px;max-height:220px;overflow:auto;border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff}
+.tset-item{display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer}
+.tset-item input{accent-color:var(--accent);width:15px;height:15px;flex:0 0 auto}
+.tseg{display:flex;gap:8px;flex-wrap:wrap}
+.tseg .btn.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
+.quiz-card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 1px 2px rgba(33,31,28,.04),0 24px 48px -32px rgba(33,31,28,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px 30px;min-height:200px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0 40px}
+.opt{position:relative;display:flex;align-items:center;justify-content:center;min-height:64px;padding:14px 34px;border-radius:16px;border:1px solid var(--line);background:#fff;cursor:pointer;font-family:inherit;font-size:16px;color:var(--ink);line-height:1.5;transition:border-color .15s,background .15s,transform .1s}
+.opt:hover{border-color:#d3cdc4;box-shadow:0 8px 18px -12px rgba(33,31,28,.3)}
+.opt:active{transform:scale(.98)}
+.opt:disabled{cursor:default;box-shadow:none}
+.opt .okey{position:absolute;top:8px;left:12px;font-size:11px;color:var(--faint)}
+.opt .oar{font-family:'Amiri',serif;font-size:20px}
+.opt.correct{border-color:var(--ok);background:#eef5ee}
+.opt.wrong{border-color:var(--accent);background:#f9e9e2}
+.res{margin:26px 0 40px;display:flex;flex-direction:column;gap:20px}
+.res-score{font-size:clamp(30px,5vw,40px);font-weight:500;text-align:center;letter-spacing:.04em}
+.res-msg{text-align:center;color:var(--muted);font-size:14px;letter-spacing:.08em}
+.res-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(8px);background:var(--ink);color:#fff;padding:9px 18px;border-radius:999px;font-size:13px;opacity:0;transition:.25s;pointer-events:none;z-index:99}
 .toast.show{opacity:1;transform:translateX(-50%)}
 
 @media (max-width:720px){
   .wrap{padding-left:20px;padding-right:20px}
+  .test-wrap{padding-left:20px;padding-right:20px}
   #appView header{padding-top:20px}
   .nav.side{display:none}
   .nav.mini{display:flex}
   .card{height:clamp(280px,50vh,380px)}
   .face{padding:26px 22px}
+  .opts{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){.inner,.fill{transition:none}.card.enter{animation:none}}
 </style>
@@ -161,6 +194,7 @@ textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-fam
       <button id="frontAr">AR → CN</button>
     </div>
     <span class="spacer"></span>
+    <button class="btn" id="testBtn">Test</button>
     <button class="btn admin-only" id="addBtn">＋ Add Words</button>
     <button class="btn admin-only" id="manageBtn">Word Bank</button>
     <button class="btn ghost admin-only" id="exitBtn">Exit Admin</button>
@@ -220,9 +254,68 @@ textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-fam
   </footer>
 </div>
 
+<!-- test mode -->
+<div id="testView" hidden>
+  <header class="test-wrap">
+    <div class="brand"><i></i>Test</div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <span id="testProgress" hidden></span>
+      <button class="btn ghost" id="testBack">← Flashcards</button>
+    </div>
+  </header>
+  <div class="test-wrap" style="flex:1">
+
+    <!-- setup -->
+    <div class="tsetup" id="testSetup">
+      <div>
+        <div class="tlabel">Sets to include</div>
+        <div class="tset-list" id="testSets"></div>
+      </div>
+      <div>
+        <div class="tlabel">Direction</div>
+        <div class="tseg">
+          <button class="btn" id="dir-zh" type="button">CN → AR</button>
+          <button class="btn" id="dir-ar" type="button">AR → CN</button>
+          <button class="btn" id="dir-mix" type="button">Mix</button>
+        </div>
+      </div>
+      <div>
+        <div class="tlabel">Length</div>
+        <div class="tseg">
+          <button class="btn" id="len-10" type="button">10</button>
+          <button class="btn" id="len-20" type="button">20</button>
+          <button class="btn" id="len-all" type="button">All</button>
+        </div>
+      </div>
+      <div><button class="btn primary" id="testStart" type="button">Start Test</button></div>
+    </div>
+
+    <!-- quiz -->
+    <div id="testQuiz" hidden>
+      <div class="quiz-card" id="testPrompt"></div>
+      <div class="opts" id="testOptions"></div>
+    </div>
+
+    <!-- results -->
+    <div class="res" id="testResults" hidden>
+      <div class="res-score" id="resScore"></div>
+      <div class="res-msg" id="resMsg"></div>
+      <div>
+        <div class="tlabel" style="text-align:center">Focus on these</div>
+        <div id="missedList"></div>
+      </div>
+      <div class="res-actions">
+        <button class="btn primary" id="retryBtn" type="button"></button>
+        <button class="btn" id="resBack" type="button">Back to flashcards</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- admin sign-in dialog -->
-<dialog id="adminDlg">
-  <form class="dlg-body" id="adminForm" style="width:min(340px,80vw)">
+<dialog id="adminDlg" class="narrow">
+  <form class="dlg-body" id="adminForm">
     <div class="dlg-head"><h3>Admin</h3><button class="x" type="button" id="adminClose">✕</button></div>
     <label class="fld mt">Email<input type="email" id="adminEmail" autocomplete="username" required></label>
     <label class="fld mt">Password<input type="password" id="adminPw" autocomplete="current-password" required></label>
@@ -232,8 +325,8 @@ textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-fam
 </dialog>
 
 <!-- contact dialog -->
-<dialog id="contactDlg">
-  <form class="dlg-body" id="contactForm" style="width:min(420px,86vw)">
+<dialog id="contactDlg" class="narrow">
+  <form class="dlg-body" id="contactForm">
     <div class="dlg-head"><h3>Contact</h3><button class="x" type="button" id="contactClose">✕</button></div>
     <p class="contact-sub">Found a bug, a wrong translation, or have an idea? Send it over — it lands straight in my inbox.</p>
     <label class="fld mt">Name<input type="text" id="cName" required maxlength="60"></label>
@@ -267,8 +360,10 @@ textarea.txt{width:100%;border-radius:12px;font-size:14px;line-height:2;font-fam
     <div class="dlg-head"><h3 id="manageTitle">Word Bank</h3><button class="x" id="manageClose" type="button">✕</button></div>
     <div class="wb-bar">
       <button class="btn" id="fillEnBtn" type="button">Fill in missing English</button>
+      <button class="btn" id="retrEnBtn" type="button">Re-translate all English</button>
       <span class="parse-info" id="fillInfo"></span>
     </div>
+    <p class="fmt-hint" style="margin:0 0 8px">English is editable — click any of it to fix a bad translation. Enter or clicking away saves.</p>
     <div id="wordList"></div>
   </div>
 </dialog>
@@ -285,6 +380,7 @@ const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,'0');
 const show=(el,on)=>{el.hidden=!on;};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fy=a=>{for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]];}return a;};
 function clearHash(){history.replaceState(null,'',location.pathname+location.search);}
 
 let sb=null,configured=false;
@@ -462,8 +558,8 @@ function renderCard(){
 function flip(){card.classList.toggle('flipped');}
 function next(){if(!order.length)return;idx=(idx+1)%order.length;renderCard();}
 function prev(){if(!order.length)return;idx=(idx-1+order.length)%order.length;renderCard();}
-function shuffle(){
-  for(let k=order.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[order[k],order[j]]=[order[j],order[k]];}
+function shuffleDeck(){
+  order=fy(order);
   idx=0;renderCard();toast('Order shuffled');
 }
 card.addEventListener('click',flip);
@@ -471,7 +567,7 @@ card.addEventListener('keydown',e=>{if(e.code==='Enter'){e.preventDefault();flip
 [['prev',prev],['next',next],['prevM',prev],['nextM',next]].forEach(([id,fn])=>{
   $(id).addEventListener('click',e=>{fn();e.currentTarget.blur();});
 });
- $('shuffleBtn').addEventListener('click',shuffle);
+ $('shuffleBtn').addEventListener('click',shuffleDeck);
 function setMode(m){
   mode=m;localStorage.setItem('vocab-mode',m);
   $('frontZh').classList.toggle('on',m==='zh');
@@ -485,7 +581,9 @@ function setMode(m){
 
  $('setSel').addEventListener('change',()=>{curSet=$('setSel').value;localStorage.setItem('vocab-set',curSet);loadSet(curSet);});
 
+/* ── keyboard: flashcards ── */
 document.addEventListener('keydown',e=>{
+  if($('appView').hidden)return;
   if($('addDlg').open||$('manageDlg').open||$('adminDlg').open||$('contactDlg').open)return;
   if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
   if(e.code==='Space'){e.preventDefault();if(!e.repeat)flip();}
@@ -665,13 +763,13 @@ function fillManage(){
   $('manageTitle').textContent=curSet==='__all__'?'Word Bank — All Sets':`Word Bank — ${curSet}`;
   const list=$('wordList');
   if(!words.length){list.innerHTML='<p class="mempty">No words in this set yet.</p>';return;}
-  list.innerHTML=words.map(w=>{
-    const meta=[w.pinyin,w.en].filter(Boolean).join(' · ');
-    return `<div class="wrow">
-      <span class="wzh">${esc(w.zh)}<em>${esc(meta)}</em></span>
+  list.innerHTML=words.map(w=>`
+    <div class="wrow">
+      <span class="wzh">${esc(w.zh)}<em>${esc(w.pinyin||'')}</em></span>
+      <span class="wen" contenteditable="true" spellcheck="false" data-id="${w.id}" data-orig="${esc(w.en||'')}">${esc(w.en||'')}</span>
       <span class="war" dir="rtl" lang="ar">${esc(w.ar)}${w.plural?` · ج. ${esc(w.plural)}`:''}</span>
       <button class="del" data-id="${w.id}" data-zh="${esc(w.zh)}">Delete</button>
-    </div>`;}).join('');
+    </div>`).join('');
 }
  $('manageBtn').addEventListener('click',()=>{if(!isAdmin)return;fillManage();$('fillInfo').textContent='';manageDlg.showModal();});
  $('manageClose').addEventListener('click',()=>manageDlg.close());
@@ -685,39 +783,216 @@ function fillManage(){
   await refresh(curSet);
   fillManage();
 });
+/* inline edit of English in the word bank */
+ $('wordList').addEventListener('blur',async e=>{
+  const el=e.target;
+  if(!el.classList||!el.classList.contains('wen'))return;
+  const val=el.textContent.replace(/\s+/g,' ').trim();
+  if(val===el.dataset.orig)return;
+  el.dataset.orig=val;
+  const{error}=await sb.from('words').update({en:val||null}).eq('id',el.dataset.id);
+  if(error){toast('Save failed: '+error.message);return;}
+  const w=words.find(x=>x.id===el.dataset.id);
+  if(w)w.en=val||null;
+  toast('Saved');
+},true);
+ $('wordList').addEventListener('keydown',e=>{
+  if(e.target.classList&&e.target.classList.contains('wen')&&e.key==='Enter'){
+    e.preventDefault();e.target.blur();
+  }
+});
 
-/* ── fill in missing English for existing words (admin only) ── */
-let fillRunning=false;
- $('fillEnBtn').addEventListener('click',async()=>{
-  if(fillRunning||!isAdmin)return;
-  const missing=words.filter(w=>!w.en||!String(w.en).trim());
-  if(!missing.length){toast('Every word already has English ✓');return;}
-  fillRunning=true;
-  const btn=$('fillEnBtn');
+/* shared runner for both translate buttons */
+async function runEnTranslate(list,overwrite,btn,info){
   btn.disabled=true;
-  let done=0,filled=0;
-  $('fillInfo').textContent=`0/${missing.length}`;
+  let done=0,upd=0;
   try{
-    for(let c=0;c<missing.length;c+=CHUNK){
-      const part=missing.slice(c,c+CHUNK);
+    for(let c=0;c<list.length;c+=CHUNK){
+      const part=list.slice(c,c+CHUNK);
       const outs=await translateChunk(part.map(w=>w.zh));
       for(let k=0;k<part.length;k++){
         const t=(outs[k]||'').trim();
-        if(t){await sb.from('words').update({en:t}).eq('id',part[k].id);filled++;}
+        if(t&&(overwrite||!part[k].en||!String(part[k].en).trim())){
+          const{error}=await sb.from('words').update({en:t}).eq('id',part[k].id);
+          if(!error)upd++;
+        }
         done++;
-        $('fillInfo').textContent=`${done}/${missing.length}`;
+        info.textContent=`${done}/${list.length}`;
       }
     }
     await refresh(curSet);
     fillManage();
-    $('fillInfo').textContent=filled?`✓ added English to ${filled} word${filled>1?'s':''}`:'service returned nothing — try again later';
-    toast(filled?`English added to ${filled} word${filled>1?'s':''}`:'No translations returned — try later');
+    info.textContent=upd?`✓ updated ${upd} word${upd>1?'s':''}`:'service returned nothing — try again later';
+    toast(upd?`English updated on ${upd} word${upd>1?'s':''}`:'No translations returned — try later');
   }catch(e){
-    $('fillInfo').textContent='';
+    info.textContent='';
     toast('Failed: '+e.message);
   }
   btn.disabled=false;
-  fillRunning=false;
+}
+ $('fillEnBtn').addEventListener('click',()=>{
+  if(!isAdmin)return;
+  const missing=words.filter(w=>!w.en||!String(w.en).trim());
+  if(!missing.length){toast('Every word already has English ✓');return;}
+  runEnTranslate(missing,false,$('fillEnBtn'),$('fillInfo'));
+});
+ $('retrEnBtn').addEventListener('click',()=>{
+  if(!isAdmin)return;
+  if(!words.length)return;
+  if(!confirm(`Overwrite the English of all ${words.length} words in view with fresh translations? (Manual edits will be lost.)`))return;
+  runEnTranslate(words,true,$('retrEnBtn'),$('fillInfo'));
+});
+
+/* ════════ test mode ════════ */
+let T=null;            /* {pool,questions,qi,score,missed,answered,advanceT} */
+let tDir=localStorage.getItem('vocarb-test-dir')||'zh';
+let tLen='10';
+
+function openTest(){
+  const box=$('testSets');
+  if(!sets.length){
+    box.innerHTML='<p class="mempty">No sets yet — add words first.</p>';
+  }else{
+    box.innerHTML=sets.map(s=>`<label class="tset-item"><input type="checkbox" value="${esc(s)}" checked>${esc(s)}</label>`).join('');
+  }
+  setTestDir(tDir);setTestLen(tLen);
+  testPhase('setup');
+  show($('appView'),false);show($('testView'),true);
+}
+function closeTest(){
+  if(T&&T.advanceT)clearTimeout(T.advanceT);
+  T=null;
+  show($('testView'),false);show($('appView'),true);
+}
+function setTestDir(d){
+  tDir=d;localStorage.setItem('vocarb-test-dir',d);
+  ['zh','ar','mix'].forEach(k=>$('dir-'+k).classList.toggle('sel',k===d));
+}
+function setTestLen(l){
+  tLen=l;
+  ['10','20','all'].forEach(k=>$('len-'+k).classList.toggle('sel',k===l));
+}
+function testPhase(p){
+  show($('testSetup'),p==='setup');
+  show($('testQuiz'),p==='quiz');
+  show($('testResults'),p==='results');
+  show($('testProgress'),p==='quiz');
+}
+ $('dir-zh').addEventListener('click',()=>setTestDir('zh'));
+ $('dir-ar').addEventListener('click',()=>setTestDir('ar'));
+ $('dir-mix').addEventListener('click',()=>setTestDir('mix'));
+ $('len-10').addEventListener('click',()=>setTestLen('10'));
+ $('len-20').addEventListener('click',()=>setTestLen('20'));
+ $('len-all').addEventListener('click',()=>setTestLen('all'));
+ $('testBtn').addEventListener('click',openTest);
+ $('testBack').addEventListener('click',closeTest);
+ $('resBack').addEventListener('click',closeTest);
+
+function buildQuestions(pool,dir,count,subset){
+  const src=fy([...(subset||pool)]).slice(0,count);
+  const disp=(x,d)=>d==='zh'?(x.ar+(x.plural?' · '+x.plural:'')):x.zh;
+  return src.map(w=>{
+    const d=dir==='mix'?(Math.random()<.5?'zh':'ar'):dir;
+    const correct=disp(w,d);
+    const used=new Set([correct]);
+    const opts=[{t:correct,ok:true}];
+    for(const c of fy([...pool])){
+      if(opts.length>=4)break;
+      if(c.id===w.id)continue;
+      const t=disp(c,d);
+      if(used.has(t))continue;
+      used.add(t);opts.push({t,ok:false});
+    }
+    return {w,d,options:fy(opts)};
+  });
+}
+async function startTest(opts){
+  opts=opts||{};
+  let pool=opts.pool,subset=opts.subset;
+  if(!pool){
+    const chosen=[...$('testSets').querySelectorAll('input:checked')].map(i=>i.value);
+    if(!chosen.length){toast('Tick at least one set');return;}
+    const{data,error}=await sb.from('words').select('*').in('set_name',chosen);
+    if(error){toast('Failed to load: '+error.message);return;}
+    pool=data||[];
+    if(pool.length<4){toast('Need at least 4 words in the selected sets');return;}
+  }
+  const count=subset?subset.length:(tLen==='all'?pool.length:Math.min(+tLen,pool.length));
+  T={pool,questions:buildQuestions(pool,tDir,count,subset),qi:0,score:0,missed:[],answered:false,advanceT:null};
+  testPhase('quiz');
+  renderQuestion();
+}
+ $('testStart').addEventListener('click',()=>startTest());
+ $('retryBtn').addEventListener('click',()=>startTest({pool:T.pool,subset:T.missed}));
+
+function renderQuestion(){
+  const q=T.questions[T.qi];
+  T.answered=false;
+  $('testProgress').textContent=`Question ${T.qi+1} of ${T.questions.length} · ${T.score} correct`;
+  const pr=$('testPrompt');
+  if(q.d==='zh'){
+    pr.dir='ltr';
+    pr.innerHTML=`${q.w.pinyin?`<div class="py">${esc(q.w.pinyin)}</div>`:''}
+      <div class="zh" lang="zh">${esc(q.w.zh)}</div>
+      ${q.w.en?`<div class="en" lang="en">${esc(q.w.en)}</div>`:''}`;
+  }else{
+    pr.dir='rtl';
+    pr.innerHTML=`<div class="ar" lang="ar">${esc(arText(q.w))}</div>`;
+  }
+  $('testOptions').innerHTML=q.options.map((o,i)=>
+    `<button class="opt" data-i="${i}"><span class="okey">${i+1}</span>${
+      q.d==='zh'?`<span class="oar" lang="ar" dir="rtl">${esc(o.t)}</span>`
+                :`<span lang="zh">${esc(o.t)}</span>`
+    }</button>`).join('');
+}
+ $('testOptions').addEventListener('click',e=>{
+  const b=e.target.closest('.opt');
+  if(b)answer(+b.dataset.i);
+});
+function answer(i){
+  if(!T||T.answered||T.qi>=T.questions.length)return;
+  const q=T.questions[T.qi];
+  if(i>=q.options.length)return;
+  T.answered=true;
+  const btns=[...$('testOptions').children];
+  btns.forEach(b=>b.disabled=true);
+  if(q.options[i].ok){
+    T.score++;
+    btns[i].classList.add('correct');
+  }else{
+    btns[i].classList.add('wrong');
+    btns[q.options.findIndex(o=>o.ok)].classList.add('correct');
+    T.missed.push(q.w);
+  }
+  $('testProgress').textContent=`Question ${T.qi+1} of ${T.questions.length} · ${T.score} correct`;
+  T.advanceT=setTimeout(()=>{
+    T.qi++;
+    if(T.qi>=T.questions.length)renderResults();
+    else renderQuestion();
+  },q.options[i].ok?900:1600);
+}
+function renderResults(){
+  testPhase('results');
+  const n=T.questions.length,p=T.score,pc=Math.round(p/n*100);
+  $('resScore').textContent=`${p} / ${n} · ${pc}%`;
+  $('resMsg').textContent=pc>=90?'Excellent! 🌟':pc>=70?'Good — nearly there.':pc>=50?'Getting there — focus on the list below.':'Keep practising — start with the list below.';
+  $('missedList').innerHTML=T.missed.length?T.missed.map(w=>`
+    <div class="wrow">
+      <span class="wzh">${esc(w.zh)}<em>${esc([w.pinyin,w.en].filter(Boolean).join(' · '))}</em></span>
+      <span class="war" dir="rtl" lang="ar">${esc(arText(w))}</span>
+    </div>`).join('')
+    :'<p class="mempty">Perfect score — nothing to review! 🎉</p>';
+  $('retryBtn').textContent=`Retry mistakes (${T.missed.length})`;
+  show($('retryBtn'),T.missed.length>0);
+}
+/* keyboard: 1–4 answer during quiz */
+document.addEventListener('keydown',e=>{
+  if($('testView').hidden||!T)return;
+  if($('testSetup')&&!$('testSetup').hidden)return;
+  if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
+  if(e.code==='Space')e.preventDefault();
+  const n=e.key;
+  if(['1','2','3','4'].includes(n)&&!$('testQuiz').hidden)answer(+n-1);
 });
 
 /* ── toast ── */

@@ -1,31 +1,27 @@
-/* Vocarb — /api/translate (100% free, no keys, no accounts, no env vars)
-   Receives: POST { words: ["提供、具备", ...] }   (max 60)
-   Returns:  { translations: [...], via: "mymemory" }
-
-   Uses the MyMemory public translation API. Free tier: 50,000 chars/day
-   when a contact email is supplied (we supply yours — it's already public
-   in the site footer). A weekly import of ~30 words is ~200 chars, so
-   quota will never realistically be hit.
-
-   If a word comes back unusable (quota text, echoed input, empty), that
-   word is returned as "" — the app shows an empty editable English slot
-   for it instead of failing the whole import.
+/* Vocarb — /api/translate (free, keyless — MyMemory public API)
+   Improvements over v1:
+   - Entries are split on 、，,; into separate senses, each translated
+     on its own, then joined with "; " (no more "X and Y" or sentence fragments)
+   - Duplicate glosses are dropped (增多、增加 → "increase", not "increase; increase")
+   - Trailing punctuation stripped; ALL-CAPS/title-case normalized to dictionary style
+   - If every segment of an entry fails, falls back to translating the whole entry
 */
 
 export const maxDuration = 30;
 
-const EMAIL = "zihanlei0512@gmail.com"; // raises MyMemory quota from 5k → 50k chars/day
+const EMAIL = "zihanlei0512@gmail.com"; // raises MyMemory quota 5k → 50k chars/day
 const TIMEOUT_MS = 8000;
+const SEG_SPLIT = /[、，,;；]/;
 
 function clean(t, src){
   let s = String(t || '').trim();
   if (!s) return '';
   if (/MYMEMORY WARNING|QUERY LENGTH LIMIT|INVALID LANGUAGE/i.test(s)) return '';
   s = s.replace(/^["“”'‘’]+|["“”'‘’]+$/g, '').replace(/\s+/g, ' ').trim();
-  if (!s || s === src) return '';                       // empty or echoed input
-  if (s === s.toUpperCase() && /[A-Z]/.test(s))         // MyMemory sometimes shouts
-    s = s.toLowerCase().replace(/(^|[.;:]\s*)[a-z]/g, m => m.toUpperCase());
-  return s;
+  if (!s || s === src) return '';
+  if (/^[A-Z][a-z]/.test(s)) s = s[0].toLowerCase() + s.slice(1); // dictionary style
+  s = s.replace(/[,;:.、]+$/, '').trim();                          // trailing punctuation
+  return (!s || s === src) ? '' : s;
 }
 
 async function askMyMemory(text, langpair){
@@ -37,13 +33,13 @@ async function askMyMemory(text, langpair){
   return r.json();
 }
 
-async function translateOne(word){
-  for (const pair of ['zh|en', 'zh-CN|en']) {           // second pair = safety net
+async function translateOne(text){
+  for (const pair of ['zh|en', 'zh-CN|en']) {
     try {
-      const d = await askMyMemory(word, pair);
-      const t = clean(d?.responseData?.translatedText, word);
+      const d = await askMyMemory(text, pair);
+      const t = clean(d?.responseData?.translatedText, text);
       if (t) return t;
-    } catch (e) { /* try the next pair */ }
+    } catch (e) { /* next pair */ }
   }
   return '';
 }
@@ -55,10 +51,38 @@ export default async function handler(req, res){
   if (!Array.isArray(words) || !words.length || words.length > 60 || words.some(w => typeof w !== 'string' || w.length > 100))
     return res.status(400).json({ error: 'Expected { words: string[] } with at most 60 short strings' });
 
-  const out = new Array(words.length).fill('');
+  /* flatten into per-sense jobs */
+  const jobs = [];
+  words.forEach((w, wi) => {
+    const segs = w.split(SEG_SPLIT).map(s => s.trim()).filter(Boolean);
+    (segs.length ? segs : [w]).forEach(s => jobs.push({ wi, text: s }));
+  });
+
+  const results = new Array(jobs.length).fill('');
   let pos = 0;
-  const worker = async () => { while (pos < words.length){ const i = pos++; out[i] = await translateOne(words[i]); } };
-  await Promise.all(Array.from({ length: Math.min(6, words.length) }, worker));
+  const worker = async () => { while (pos < jobs.length) { const k = pos++; results[k] = await translateOne(jobs[k].text); } };
+  await Promise.all(Array.from({ length: Math.min(8, jobs.length) }, worker));
+
+  /* reassemble per word, dropping duplicate glosses */
+  const out = new Array(words.length).fill('');
+  const done = new Set();
+  for (let wi = 0; wi < words.length; wi++) {
+    const parts = [], seen = new Set();
+    jobs.forEach((j, k) => {
+      if (j.wi !== wi) return;
+      const t = results[k];
+      if (!t) return;
+      const key = t.toLowerCase();
+      if (seen.has(key)) return;
+      seen.add(key); parts.push(t);
+    });
+    if (parts.length) { out[wi] = parts.join('; '); done.add(wi); }
+  }
+
+  /* whole-entry fallback for words whose segments all failed */
+  for (let wi = 0; wi < words.length; wi++) {
+    if (!done.has(wi)) out[wi] = await translateOne(words[wi]);
+  }
 
   if (out.every(t => !t))
     return res.status(502).json({ error: 'Translation service returned nothing usable — try again in a minute (you can still save; English can be added later).' });
